@@ -1,0 +1,36 @@
+.header {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.header h1 {
+    text-align: center;
+}
+
+.header-nav {
+    display: flex;
+    align-items: center;
+   justify-content: center;
+}
+
+.header-nav-list {
+    list-style: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    column-gap: 25px;
+}
+
+.header-nav-item {
+    color: #ff5722; /* Оранжевый */
+    text-decoration: none;
+    font-weight: bold;
+    padding: 10px;
+    border: 1px solid black;
+}
+
+.header-nav-item:hover{
+    color: #ff8a65; /* Более светлый оранжевый при наведении */
+    text-decoration: underline;
+}

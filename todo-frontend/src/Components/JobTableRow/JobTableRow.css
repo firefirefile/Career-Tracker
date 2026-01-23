@@ -1,0 +1,20 @@
+.job-table-row {
+    padding :12px;
+    background: #a3aebd;
+    border: 1px solid #dddddd;
+
+}
+
+.job-table-row td{
+    padding: 5px 10px;
+    border: 1px solid #eee;
+    text-align: left;
+}
+
+
+th:nth-child(1), td:nth-child(1) { width: 60px; text-align: center; }
+th:nth-child(2), td:nth-child(2) { width: 200px; }
+th:nth-child(3), td:nth-child(3) { width: 250px; }
+th:nth-child(4), td:nth-child(4) { width: 120px; }
+th:nth-child(5), td:nth-child(5) { width: 180px; }
+th:nth-child(6), td:nth-child(6) { width: auto; }
