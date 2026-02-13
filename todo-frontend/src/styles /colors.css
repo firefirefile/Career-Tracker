@@ -1,0 +1,39 @@
+:root {
+    /* Основные цвета */
+    --primary: #ffffff;
+    --primary-dark: #5a67d8;
+    --primary-light: #7c8aea;
+
+    --secondary: #764ba2;
+    --secondary-dark: #6b46a1;
+    --secondary-light: #8a5cb6;
+
+    /* Градиенты */
+    --gradient-primary: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+    --gradient-dark: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%);
+    --gradient-light: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    --gradient-rainbow: linear-gradient(-10deg, #835d4b, #7e3a55, #5f99ab, #5aa191);
+
+    /* Фон */
+    --bg-primary: #667eea;
+    --bg-secondary: #764ba2;
+    --bg-tertiary: #7c8aea;
+
+    /* Текст */
+    --text-primary: #1a202c;
+    --text-secondary: #4a5568;
+    --text-tertiary: #718096;
+    --text-light: #ffffff;
+
+    /* Бордеры */
+    --border-light: #e2e8f0;
+    --border-medium: #cbd5e0;
+    --border-dark: #a0aec0;
+
+    /* Тени */
+    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.12);
+    --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+    --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.15);
+    --shadow-xl: 0 20px 40px rgba(0, 0, 0, 0.2);
+
+}

@@ -1,1 +1,4 @@
-export const API_URL = 'http://localhost:3000/api/jobs'
+
+export const BACKEND_URL = 'http://127.0.0.1:3000'
+
+export const API_URL = `${BACKEND_URL}/api/jobs`;

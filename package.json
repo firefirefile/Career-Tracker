@@ -1,0 +1,64 @@
+{
+  "name": "career-tracker",
+  "version": "1.0.0",
+  "description": "Карьерный трекер - приложение для отслеживания вакансий",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "dev": "concurrently \"npm run dev:react\" \"npm run dev:express\" \"sleep 3 && electron .\"",
+    "dev:react": "cd todo-frontend && npm run dev",
+    "dev:express": "cd express-backend && npm start",
+    "build": "npm run build-react && npm run build-express && npm run package:mac",
+    "build-react": "cd todo-frontend && npm run build",
+    "build-express": "cd express-backend && npm ci --production",
+    "install-all": "npm install && cd todo-frontend && npm install && cd ../express-backend && npm install",
+    "package": "electron-builder",
+    "package:win": "electron-builder --win",
+    "package:mac": "electron-builder --mac",
+    "package:linux": "electron-builder --linux"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/firefirefile/Career-Tracker.git"
+  },
+  "keywords": [
+    "career",
+    "tracker",
+    "vacancy",
+    "electron",
+    "hh.ru"
+  ],
+  "author": "firefirefile",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/firefirefile/Career-Tracker/issues"
+  },
+  "homepage": "https://github.com/firefirefile/Career-Tracker#readme",
+  "devDependencies": {
+    "concurrently": "^8.2.2",
+    "electron": "^40.1.0",
+    "electron-builder": "^25.1.8"
+  },
+  "build": {
+    "appId": "com.firefirefile.careertracker",
+    "productName": "Career Tracker",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "main.js",
+      "todo-frontend/dist/**/*",
+      "!node_modules/**/*"
+    ],
+    "extraResources": [
+      {
+        "from": "express-backend",
+        "to": "express-backend"
+      }
+    ],
+    "asar": true,
+    "mac": {
+      "target": "dmg"
+    }
+  }
+}

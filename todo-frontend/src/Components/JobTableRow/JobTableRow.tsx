@@ -12,26 +12,21 @@ const JobTableRow = ({ job, onDelete, onView, index }: JobTableRowProps) => {
 
     const handleStatusChange = async (newStatus: JobStatus) => {
         setStatus(newStatus);
-        // await axios.put(`/api/jobs/${job.id}`, { status: newStatus })
-
         try {
             await  axios.put(`${API_URL}/${job.id}`, {status: newStatus});
         } catch (error) {
-            console.log('Ошибка при загрузке данных на бэк братик', error)
             setStatus(job.status)
         }
     }
 
     const handleDeleteClick = () => {
         if(onDelete) {
-            console.log('Удаление вакансии ID:', job.id);
             onDelete(job.id);
         }
     }
 
     const  handleOnView = () => {
         if (onView) {
-            console.log("Открываем вакансию", job.id)
             onView(job.id)
         }
     }

@@ -30,6 +30,7 @@ export interface  JobFormInputProps {
     type:string;
     onChange: (e:React.ChangeEvent<HTMLInputElement>) => void;
     isBig?: boolean;
+    ref?: HTMLInputElement;
 
 }
 
@@ -39,12 +40,17 @@ export interface FormData {
     url: string;
     status: JobStatus;
     comments:string;
+    createdAt: string;
 }
 
 export interface JobTableProps {
     jobs: Job[] ;
     onDeleteJob: (jobId: JobId) => void;
     onViewJobDetails: (jobId: JobId) => void;
+}
+
+export interface JobFormProps {
+    onCreate?:(job: Job) => void;
 }
 
 export interface JobTableRowProps {

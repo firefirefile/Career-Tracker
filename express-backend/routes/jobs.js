@@ -54,7 +54,7 @@ router.get('/:id', async (req, res) => {
 // POST /api/jobs - создать новую вакансию
 router.post('/', async (req, res) => {
     try {
-        const { company, vacancyName, url, status = 'wait', comments = [] } = req.body;
+        const { company, vacancyName, url, status = 'wait', comments = [], createdAt } = req.body;
 
         // Валидация
         if (!company || company.trim() === '') {
@@ -76,7 +76,8 @@ router.post('/', async (req, res) => {
             vacancyName: vacancyName.trim(),
             url: url || '',
             status: status,
-            comments: comments
+            comments: comments,
+            createdAt: createdAt
         };
 
         const createdJob = await jobsStorage.create(newJob);

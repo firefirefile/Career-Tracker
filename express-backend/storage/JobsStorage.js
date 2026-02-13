@@ -103,7 +103,7 @@ class JobsStorage {
             url: jobData.url || '',
             status: jobData.status || 'wait',
             comments: Array.isArray(jobData.comments) ? jobData.comments : [jobData.comments || ''],
-            createdAt: new Date().toISOString()
+            createdAt: jobData.createdAt || new Date().toISOString(),
         };
 
         this.jobs.push(newJob);

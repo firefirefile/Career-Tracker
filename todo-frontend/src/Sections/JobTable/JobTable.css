@@ -5,10 +5,10 @@
 }
 
 .job-table--th > th{
-background: #747bff;
+background: var(--primary-dark);
     font-weight: 600;
     padding: 20px;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    box-shadow: 0 1px 3px var(--secondary-dark);
 
 }
 
@@ -17,10 +17,10 @@ opacity: 0.1;
 }
 
 .table tbody tr:nth-child(odd){
-    background: #fff;
+    background: var(--primary-light);
 }
 .table tbody tr:nth-child(even){
-    background: #F7F7F7;
+    background: var(--secondary-light);
 }
 
 

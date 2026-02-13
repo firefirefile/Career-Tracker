@@ -26,6 +26,7 @@ function App() {
         fetchJobs();
     }, []);
 
+
     const fetchJobs = async () => {
         try {
             setLoading(true);
@@ -51,26 +52,74 @@ function App() {
     // };
     //
 
+    // const handleDeleteJob = async (jobId: number) => {
+    //     if(window.confirm('Удалить эту вакансию?')) {
+    //         try {
+    //             await axios.delete(`${API_URL}/${jobId}`);
+    //             setJobs(prevJobs => prevJobs.filter(job =>job.id !== jobId ))
+    //
+    //         }
+    //         catch (err: any) {
+    //
+    //             alert(`Ошибка ${err.response?.status}: ${JSON.stringify(err.response?.data)}`);
+    //         }
+    //     }
+    //
+    // }
+
     const handleDeleteJob = async (jobId: number) => {
         if(window.confirm('Удалить эту вакансию?')) {
             try {
-                console.log(`URL запроса: ${API_URL}/${jobId}`);
-                await axios.delete(`${API_URL}/${jobId}`);
+                console.log('=== НАЧАЛО УДАЛЕНИЯ ===');
+                console.log('ID для удаления:', jobId);
+                console.log('Тип ID:', typeof jobId);
+                console.log('API_URL:', API_URL);
 
+                const deleteUrl = `${API_URL}/${jobId}`;
+                console.log('Полный URL для DELETE:', deleteUrl);
 
-                setJobs(prevJobs => prevJobs.filter(job =>job.id !== jobId ))
+                console.log('Делаем DELETE запрос...');
+                const response = await axios.delete(deleteUrl);
 
+                console.log('✅ Успешный ответ:', response.data);
+
+                setJobs(prevJobs => {
+                    const newJobs = prevJobs.filter(job => job.id !== jobId);
+                    console.log('Старые вакансии:', prevJobs.length);
+                    console.log('Новые вакансии:', newJobs.length);
+                    return newJobs;
+                });
+
+                console.log('=== УДАЛЕНИЕ ЗАВЕРШЕНО ===');
             }
             catch (err: any) {
+                console.error('=== ОШИБКА УДАЛЕНИЯ ===');
+                console.error('Сообщение:', err.message);
+                console.error('Код:', err.code);
 
-                alert(`Ошибка ${err.response?.status}: ${JSON.stringify(err.response?.data)}`);
+                if (err.response) {
+                    console.error('Статус:', err.response.status);
+                    console.error('Данные ответа:', err.response.data);
+                    console.error('Заголовки:', err.response.headers);
+                }
+
+                if (err.request) {
+                    console.error('Запрос был сделан, но нет ответа');
+                    console.error('Запрос:', err.request);
+                }
+
+                console.error('Конфиг запроса:', {
+                    url: err.config?.url,
+                    method: err.config?.method,
+                    headers: err.config?.headers
+                });
+
+                alert(`Ошибка ${err.response?.status || 'нет соединения'}: ${JSON.stringify(err.response?.data || err.message)}`);
             }
         }
-
     }
 
     const handleViewJobDetails = (jobId: number) => {
-        console.log('Открываем детали вакансии ID:', jobId);
 
         // Находим вакансию в массиве
         const job = jobs.find(j => j.id === jobId);
@@ -132,7 +181,7 @@ function App() {
                         element={
                         <div className="app-create">
                             <JobForm
-                                onChange={handleJobCreated}
+                                onCreate={handleJobCreated}
                             />
                         </div>
                         }

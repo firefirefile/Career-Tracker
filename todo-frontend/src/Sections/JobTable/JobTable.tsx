@@ -9,9 +9,6 @@ const JobTable = ({jobs, onDeleteJob, onViewJobDetails} : JobTableProps) => {
         <>
 
             <table className="job-table">
-                <caption className="job-table--caption">
-                    React + TypeScript + Express API
-                </caption>
                 <thead>
 
                 <tr className="job-table--th">

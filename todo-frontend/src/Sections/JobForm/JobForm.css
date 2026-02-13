@@ -1,7 +1,204 @@
-.job-form {
+.job-form{
+    background-color: var(--text-secondary);
+    border-radius: 4px;
+    max-width: 1000px;
+}
+
+.job-form h2{
+    text-align: center;
+    color: var(--text-light);
+    margin-bottom: 30px;
+}
+
+.url-section {
+    margin-bottom: 25px;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 20px;
+    background-color: #f9f9f9;
+}
+
+/* Обычные поля формы (кроме URL) */
+.job-form-input:not(.url-section) {
+    margin-bottom: 25px;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 20px;
+    background-color: #f9f9f9;
+}
+
+/* АЛЬТЕРНАТИВА: если .job-form-input используется только для обычных полей */
+.job-form-input {
+    margin-bottom: 25px;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 20px;
+    background-color: #f9f9f9;
+}
+
+/* Для большого текстового поля (комментарии) */
+.job-form-input.big {
+    min-height: 120px;
+}
+
+.url-input-group {
     display: flex;
     flex-direction: column;
-    column-gap: 10px;
-    justify-content: center;
+    gap: 12px;
+}
 
+.parse-buttons {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-top: 15px; /* ← ОТСТУП ОТ ПОЛЯ ВВОДА */
+}
+
+/* Кнопки парсинга */
+.parse-button {
+    padding: 12px 20px;
+    background-color: #2196F3;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    transition: background-color 0.3s;
+    flex: 1;
+    min-width: 200px;
+}
+
+.parse-button:hover:not(:disabled) {
+    background-color: #1976D2;
+}
+
+.parse-button:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+}
+
+/* Кнопка "Вставить ссылку" */
+.paste-button {
+    padding: 12px 20px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    transition: background-color 0.3s;
+    flex: 1;
+    min-width: 120px;
+}
+
+.paste-button:hover:not(:disabled) {
+    background-color: #388E3C;
+}
+
+.paste-button:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+}
+
+/* Кнопка "Сохранить отклик" (отдельно) */
+.button {
+    padding: 15px 30px;
+    background-color: #673AB7;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 600;
+    transition: background-color 0.3s;
+    width: 100%;
+    margin-top: 20px;
+}
+
+.submit-button:hover:not(:disabled) {
+    background-color: #5E35B1;
+}
+
+/* Сообщения */
+.parse-message {
+    margin-top: 12px;
+    padding: 10px 15px;
+    border-radius: 4px;
+    font-size: 14px;
+    animation: fadeIn 0.3s ease-in;
+}
+
+.parse-message.error {
+    background-color: #FFEBEE;
+    color: #C62828;
+    border-left: 4px solid #C62828;
+}
+
+.parse-message.success {
+    background-color: #E8F5E9;
+    color: #2E7D32;
+    border-left: 4px solid #2E7D32;
+}
+
+.parse-message.loading {
+    background-color: #E3F2FD;
+    color: #1565C0;
+    border-left: 4px solid #1565C0;
+}
+
+/* Стили для полей ввода внутри */
+.job-form-label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+    color: #333;
+}
+
+.job-form-label .required {
+    color: #f44336;
+    margin-left: 4px;
+}
+
+.job-form-input-field {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+    box-sizing: border-box; /* ← ВАЖНО: чтобы padding не увеличивал ширину */
+}
+
+.job-form-input-field:focus {
+    outline: none;
+    border-color: #2196F3;
+    box-shadow: 0 0 0 2px rgba(33, 150, 243, 0.2);
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+    .job-form {
+        padding: 15px;
+        margin: 10px;
+    }
+
+    .parse-buttons {
+        flex-direction: column;
+    }
+
+    .parse-button,
+    .paste-button {
+        min-width: 100%;
+    }
+
+    .url-section,
+    .job-form-input {
+        padding: 15px;
+    }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-5px); }
+    to { opacity: 1; transform: translateY(0); }
 }

@@ -1,28 +1,5 @@
 [
   {
-    "id": 5,
-    "company": "О ю о ми тэдедедедед",
-    "vacancyName": "О ю о ми тэдедедедед",
-    "url": "О ю о ми тэдедедедед",
-    "status": "wait",
-    "comments": [
-      "О ю о ми тэдедедедед"
-    ],
-    "createdAt": "2026-01-23T12:24:43.245Z",
-    "updatedAt": "2026-01-23T14:12:39.210Z"
-  },
-  {
-    "id": 6,
-    "company": "fdfdsg",
-    "vacancyName": "sdfsdfsd",
-    "url": "sdgsdgsfd",
-    "status": "deny",
-    "comments": [
-      "sdfsdfdfs"
-    ],
-    "createdAt": "2026-01-23T13:02:57.718Z"
-  },
-  {
     "id": 7,
     "company": "ФГАОУ ВО РОССИЙСКИЙ НАЦИОНАЛЬНЫЙ ИССЛЕДОВАТЕЛЬСКИЙ МЕДИЦИНСКИЙ УНИВЕРСИТЕТ им.Н.И. ПИРОГОВА МИНИСТЕРСТВА ЗДРАВООХРАНЕНИЯ РОССИЙСКОЙ ФЕДЕРАЦИИ",
     "vacancyName": "Фронтенд-разработчик/Junior+ Frontend (React) Developer",
@@ -32,5 +9,73 @@
       "Наши ожидания:  Высшее образование, приоритетно в сфере информационных технологий; Стаж работы программистом более 1-1,5 лет; Практический опыт коммерческой разработки с использованием фреймворка ReactJS и следующих технологиях: HTML5, CSS3, JavaScript, которые позволяют с ними работать; Понимание устройства реляционных баз данных, опыт работы с серверными решениями, взаимодействующими с СУБД PostgreSQL; Знание Git, опыт использования в рабочих задачах любой платформы (GitLab, GitHub); Практический опыт коммерческой командной разработки, умение использовать организационные инструменты (трекер задач, система документации)."
     ],
     "createdAt": "2026-01-23T13:05:44.877Z"
+  },
+  {
+    "id": 8,
+    "company": "Aston",
+    "vacancyName": "JavaScript разработчик (стажер)",
+    "url": "https://ekaterinburg.hh.ru/vacancy/129584766?hhtmFrom=negotiation_list",
+    "status": "deny",
+    "comments": [
+      "Пригласили на тест в телеграм-боте, по условиям была кабала с зп 5к в месяц, сроком на 1,5 года. Завалил тест, 0 из 5 правильных ответов по теме ООП"
+    ],
+    "createdAt": "2026-01-23T15:26:25.486Z"
+  },
+  {
+    "id": 9,
+    "company": "Staffline",
+    "vacancyName": "Верстальщик (HTML / Vanilla JS)",
+    "url": "https://ekaterinburg.hh.ru/vacancy/129465422",
+    "status": "deny",
+    "comments": [
+      ""
+    ],
+    "createdAt": "2026-01-23T18:14:43.595Z",
+    "updatedAt": "2026-01-26T18:09:36.667Z"
+  },
+  {
+    "id": 10,
+    "company": "Полушкина Мария Вячеславовна",
+    "vacancyName": "JavaScript developer",
+    "url": "https://ekaterinburg.hh.ru/vacancy/129370383?hhtmFrom=negotiation_list",
+    "status": "deny",
+    "comments": [
+      ""
+    ],
+    "createdAt": "2026-01-20"
+  },
+  {
+    "id": 11,
+    "company": "ООО NOVATEST",
+    "vacancyName": "Стажер QA-engineer",
+    "url": "https://ekaterinburg.hh.ru/vacancy/129668662?from=applicant_recommended&hhtmFrom=main",
+    "status": "wait",
+    "comments": [
+      "Я люблю есть "
+    ],
+    "createdAt": "2026-01-26"
+  },
+  {
+    "id": 12,
+    "company": "Группа Ремедиум",
+    "vacancyName": "Дизайнер презентаций (HTML-верстальщик)",
+    "url": "https://ekaterinburg.hh.ru/vacancy/129892355?from=applicant_recommended&hhtmFrom=main",
+    "status": "wait",
+    "comments": [
+      ""
+    ],
+    "createdAt": "2026-01-27"
+  },
+  {
+    "id": 13,
+    "company": "ООО АЙРО",
+    "vacancyName": "Мобильный разработчик (React Native)",
+    "url": "https://ekaterinburg.hh.ru/vacancy/129954297?hhtmFrom=vacancy_search_list",
+    "status": "archive",
+    "comments": [
+      ""
+    ],
+    "createdAt": "2026-02-04",
+    "updatedAt": "2026-02-04T06:19:34.297Z"
   }
 ]

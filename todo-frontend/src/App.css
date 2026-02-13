@@ -1,8 +1,10 @@
-
+body {
+    background: var(--gradient-rainbow);
+    color: var(--text-primary);
+}
 
 .app {
-
-    display: flex;
+      display: flex;
     flex-direction: column;
 }
 
@@ -28,4 +30,12 @@
     border-radius: 12px;
     box-shadow: 0 4px 20px rgba(0,0,0,0.1);
 }
-
+.job-details {
+    align-self: center;
+    width: 100%;
+    max-width: 800px;
+    background: white;
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+}
