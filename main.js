@@ -2,9 +2,11 @@ const { app, BrowserWindow } = require('electron');
 const path = require('path');
 const { spawn } = require('child_process');
 const fs = require('fs');
+const http = require('http');
 
 let mainWindow;
-let expressProcess;
+let expressServer = null; // Для in-process сервера
+let expressProcess = null; // Для отдельного процесса (dev)
 const EXPRESS_PORT = 3000;
 
 // Глобальный обработчик ошибок
@@ -19,52 +21,87 @@ process.on('unhandledRejection', (reason, promise) => {
 // 1. Запускаем Express
 function startExpress() {
     console.log('Запускаем Express...');
+    
+    if (app.isPackaged) {
+        // В packaged режиме запускаем Express в основном процессе
+        try {
+            const expressPath = path.join(process.resourcesPath, 'express-backend');
+            const appPath = path.join(expressPath, 'app.js');
+            
+            console.log('Загружаю Express app из:', appPath);
+            
+            if (!fs.existsSync(appPath)) {
+                console.error('❌ Не найден app.js по пути:', appPath);
+                return false;
+            }
+            
+            // Устанавливаем переменные окружения для Express
+            process.env.PORT = EXPRESS_PORT;
+            process.env.NODE_ENV = 'production';
+            
+            // Загружаем Express приложение
+            const expressApp = require(appPath);
+            
+            // Создаём HTTP сервер
+            expressServer = http.createServer(expressApp);
+            
+            // Запускаем сервер
+            expressServer.listen(EXPRESS_PORT, '0.0.0.0', () => {
+                console.log(`✅ Express запущен на порту ${EXPRESS_PORT} (в основном процессе)`);
+            });
+            
+            expressServer.on('error', (err) => {
+                console.error('❌ Ошибка Express сервера:', err);
+            });
+            
+            return true;
+        } catch (error) {
+            console.error('❌ Не удалось запустить Express в основном процессе:', error);
+            return false;
+        }
+    } else {
+        // В dev режиме запускаем отдельный процесс
+        const expressPath = path.join(__dirname, 'express-backend');
+        const wwwPath = path.join(expressPath, 'bin', 'www');
 
-    const expressPath = app.isPackaged
-        ? path.join(process.resourcesPath, 'express-backend')
-        : path.join(__dirname, 'express-backend');
+        if (!fs.existsSync(wwwPath)) {
+            console.error('❌ Нет файла www по пути:', wwwPath);
+            return false;
+        }
 
-    const wwwPath = path.join(expressPath, 'bin', 'www');
+        // Используем системный node
+        expressProcess = spawn('node', [wwwPath], {
+            cwd: expressPath,
+            env: {
+                PORT: EXPRESS_PORT,
+                NODE_ENV: 'development'
+            },
+            stdio: 'pipe'
+        });
 
-    if (!fs.existsSync(wwwPath)) {
-        console.error('❌ Нет файла www по пути:', wwwPath);
-        return false;
+        expressProcess.stdout.on('data', data => {
+            const msg = data.toString().trim();
+            if (msg) console.log('📦 Express:', msg);
+        });
+
+        expressProcess.stderr.on('data', data => {
+            const msg = data.toString().trim();
+            if (msg) console.error('❌ Express error:', msg);
+        });
+
+        expressProcess.on('error', (err) => {
+            console.error('❌ Не удалось запустить Express:', err.message);
+        });
+
+        expressProcess.on('exit', (code) => {
+            console.log(`📦 Express завершился с кодом: ${code}`);
+        });
+
+        // Ждём немного, чтобы Express запустился
+        return new Promise((resolve) => {
+            setTimeout(() => resolve(true), 1500);
+        });
     }
-
-    // Используем node из Electron
-    const nodePath = app.isPackaged ? process.execPath : 'node';
-
-    expressProcess = spawn(nodePath, [wwwPath], {
-        cwd: expressPath,
-        env: {
-            PORT: EXPRESS_PORT,
-            NODE_ENV: app.isPackaged ? 'production' : 'development'
-        },
-        stdio: 'pipe'
-    });
-
-    expressProcess.stdout.on('data', data => {
-        const msg = data.toString().trim();
-        if (msg) console.log('📦 Express:', msg);
-    });
-
-    expressProcess.stderr.on('data', data => {
-        const msg = data.toString().trim();
-        if (msg) console.error('❌ Express error:', msg);
-    });
-
-    expressProcess.on('error', (err) => {
-        console.error('❌ Не удалось запустить Express:', err.message);
-    });
-
-    expressProcess.on('exit', (code) => {
-        console.log(`📦 Express завершился с кодом: ${code}`);
-    });
-
-    // Ждём немного, чтобы Express запустился
-    return new Promise((resolve) => {
-        setTimeout(() => resolve(true), 1500);
-    });
 }
 
 // 2. Создаём окно
@@ -87,6 +124,20 @@ async function createWindow() {
         }
     });
 
+    // Открывать внешние ссылки в системном браузере
+    mainWindow.webContents.setWindowOpenHandler(({ url }) => {
+        // Если ссылка на внешний сайт (не localhost:3000 или file://), открываем в браузере
+        if (url.startsWith('http://') || url.startsWith('https://')) {
+            const isLocalhost = url.includes('localhost:3000') || url.includes('127.0.0.1:3000');
+            if (!isLocalhost) {
+                console.log('🌐 Открываю внешнюю ссылку в браузере:', url);
+                require('electron').shell.openExternal(url);
+                return { action: 'deny' };
+            }
+        }
+        return { action: 'allow' };
+    });
+
     // Ловим ошибки рендеринга
     mainWindow.webContents.on('did-finish-load', () => {
         console.log('✅ Окно загрузилось');
@@ -100,6 +151,19 @@ async function createWindow() {
         console.error('❌ Окно упало. killed:', killed);
     });
 
+    // Открывать внешние ссылки при навигации в системном браузере
+    mainWindow.webContents.on('will-navigate', (event, url) => {
+        // Если это не внутренняя навигация (не API и не file://), открываем в браузере
+        if (url.startsWith('http://') || url.startsWith('https://')) {
+            const isLocalhost = url.includes('localhost:3000') || url.includes('127.0.0.1:3000');
+            if (!isLocalhost) {
+                console.log('🌐 Открываю внешнюю ссылку в браузере (will-navigate):', url);
+                event.preventDefault();
+                require('electron').shell.openExternal(url);
+            }
+        }
+    });
+
     // Загружаем фронтенд
     if (app.isPackaged) {
         // В packaged режиме используем app.getAppPath() для корректной работы с ASAR
@@ -107,17 +171,34 @@ async function createWindow() {
         const indexPath = path.join(basePath, 'todo-frontend', 'dist', 'index.html');
         console.log('Загружаю index.html из packaged ресурсов:', indexPath);
 
+        // Проверяем существование файла
+        if (!fs.existsSync(indexPath)) {
+            console.error('❌ Файл index.html не найден по пути:', indexPath);
+            console.log('Попробую альтернативный путь или fallback...');
+        } else {
+            console.log('✅ Файл найден, загружаю...');
+        }
+
         try {
+            // Используем loadFile - он должен работать с ASAR
             await mainWindow.loadFile(indexPath);
             console.log('✅ Фронтенд успешно загружен из packaged ресурсов');
         } catch (error) {
-            console.error('❌ Не удалось загрузить фронтенд из packaged ресурсов:', error.message);
-            console.log('Пробую fallback на Express сервер...');
+            console.error('❌ Ошибка loadFile:', error.message);
+            console.log('Пробую загрузить через file:// URL...');
             try {
-                await mainWindow.loadURL(`http://localhost:${EXPRESS_PORT}`);
-                console.log('✅ Загружено fallback с Express');
-            } catch (fallbackError) {
-                console.error('❌ Fallback также не удался:', fallbackError);
+                // Альтернативный способ - через file://
+                await mainWindow.loadURL(`file://${indexPath}`);
+                console.log('✅ Загружено через file://');
+            } catch (e) {
+                console.error('❌ Не удалось загрузить через file://:', e.message);
+                console.log('Пробую fallback на Express сервер...');
+                try {
+                    await mainWindow.loadURL(`http://localhost:${EXPRESS_PORT}`);
+                    console.log('✅ Загружено fallback с Express');
+                } catch (fallbackError) {
+                    console.error('❌ Все способы загрузки не удались:', fallbackError);
+                }
             }
         }
     } else {
@@ -158,10 +239,22 @@ app.whenReady().then(async () => {
 // 4. Обработка закрытия всех окон
 app.on('window-all-closed', () => {
     console.log('Все окна закрыты');
-    if (expressProcess && !expressProcess.killed) {
-        console.log('Останавливаю Express...');
-        expressProcess.kill();
+    
+    // Останавливаем Express
+    if (expressServer) {
+        console.log('Останавливаю Express сервер...');
+        expressServer.close(() => {
+            console.log('✅ Express сервер остановлен');
+        });
+        expressServer = null;
     }
+    
+    if (expressProcess && !expressProcess.killed) {
+        console.log('Останавливаю Express процесс...');
+        expressProcess.kill();
+        expressProcess = null;
+    }
+    
     if (process.platform !== 'darwin') {
         app.quit();
     }
@@ -169,7 +262,13 @@ app.on('window-all-closed', () => {
 
 // 5. Выход из приложения
 app.on('before-quit', () => {
+    if (expressServer) {
+        console.log('Останавливаю Express сервер перед выходом...');
+        expressServer.close();
+        expressServer = null;
+    }
     if (expressProcess && !expressProcess.killed) {
         expressProcess.kill();
+        expressProcess = null;
     }
 });
